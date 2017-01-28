@@ -7,11 +7,4 @@ class FuntimeTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         XCTAssertEqual(Funtime().text, "Hello, World!")
     }
-
-
-    static var allTests : [(String, (FuntimeTests) -> () throws -> Void)] {
-        return [
-            ("testExample", testExample),
-        ]
-    }
 }
