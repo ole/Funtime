@@ -14,15 +14,13 @@ class ClassTests: XCTestCase {
     }
 
     func testDoesNotCrashIfInitializedWithPureSwiftClass() {
-        class Person {}
-        let sut = Class(base: Person.self)
+        let sut = Class(base: EmptySwiftClass.self)
         // The exact contents of sut.name are not important. They may change in future Swift versions or if we rename this function or module.
-        XCTAssertEqual(sut.name, "_TtCFC12FuntimeTests10ClassTests47testDoesNotCrashIfInitializedWithPureSwiftClassFT_T_L_6Person")
+        XCTAssert(sut.name.hasSuffix("EmptySwiftClass"))
     }
 
     func testDoesNotCrashIfInitializedWithPureSwiftValue() {
-        struct Person { var name: String }
-        let person = Person(name: "Jane")
+        let person = SwiftStruct(name: "Jane")
         let sut = Class(of: person)
         // The exact contents of sut.name are not important. They may change in future Swift versions.
         XCTAssertEqual(sut.name, "_SwiftValue")
@@ -52,5 +50,11 @@ class ClassTests: XCTestCase {
         // The metaclass's metaclass is NSObject's metaclass
         let nsobj = Class(base: NSObject.self)
         XCTAssertEqual(sut.metaclass.metaclass, nsobj.metaclass)
+    }
+
+    func testProperties() {
+        let sut = Class(base: NSObjectSubclass.self)
+        let properties = sut.properties
+        XCTAssertEqual(properties.count, 2)
     }
 }

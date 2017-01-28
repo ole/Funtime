@@ -1,7 +1,8 @@
 import ObjectiveC
 
-/// A wrapper around a class object in the Objective-C runtime.
-public class Class {
+/// A wrapper around a class object (`AnyClass` in Swift;
+/// `Class` in Objective-C) in the Objective-C runtime.
+public final class Class {
     public let base: AnyClass
 
     /// Initializes a Class instance with a class object.
@@ -28,6 +29,10 @@ public class Class {
         self.base = object_getClass(instance)
     }
 
+    deinit {
+        _properties?.deallocate(capacity: _propertiesCount + 1)
+    }
+
     public var name: String {
         return String(cString: class_getName(base))
     }
@@ -51,6 +56,25 @@ public class Class {
         // The metaclass is the class of a class object.
         return Class(of: base)
     }
+
+    /// An array of the class's properties. Properties declared by a
+    /// superclass are not included.
+    ///
+    /// This returns the class's _instance_ properties. To retrieve
+    /// a class's _class_ properties, use `metaclass.properties`.
+    public var properties: [Property] {
+        var count: UInt32 = 0
+        _properties = class_copyPropertyList(base, &count)
+        _propertiesCount = Int(count)
+        guard let propertyList = _properties else { return [] }
+        let buffer = UnsafeBufferPointer(start: propertyList, count: _propertiesCount + 1)
+        return buffer.flatMap { property in property.map(Property.init(base:)) }
+    }
+
+    /// A C array of this class's properties, followed by a NULL terminator,
+    /// i.e. length is _propertiesCount + 1.
+    private var _properties: UnsafeMutablePointer<objc_property_t?>? = nil
+    private var _propertiesCount: Int = 0 // Not including NULL terminator
 }
 
 extension Class: Equatable {
