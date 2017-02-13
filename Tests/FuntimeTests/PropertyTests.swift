@@ -10,6 +10,18 @@ class PropertyTests: XCTestCase {
         XCTAssertEqual(sut[1].name, "lastName")
     }
 
+    func testIsAtomic() {
+        let cls = Class(base: NSObjectSubclass.self)
+        let sut = cls.properties()[0]
+        XCTAssertFalse(sut.isAtomic)
+    }
+
+    func testIsNonAtomic() {
+        let cls = Class(base: NSObjectSubclass.self)
+        let sut = cls.properties()[0]
+        XCTAssertTrue(sut.isNonAtomic)
+    }
+
     func testAttributeString() {
         let cls = Class(base: NSObjectSubclass.self)
         let sut = cls.properties()[0]
@@ -22,10 +34,10 @@ class PropertyTests: XCTestCase {
         XCTAssertEqual(sut.typeEncoding, "@\"NSString\"")
     }
 
-    func testLifetime() {
-        var cls: Class? = Class(base: NSObjectSubclass.self)
-        let sut = cls?.properties()[0]
-        cls = nil
-        XCTAssertEqual(sut?.typeEncoding, "@\"NSString\"")
+    func testAttributes() {
+        let cls = Class(base: NSObjectSubclass.self)
+        let sut = cls.properties()[0]
+        let attributes = sut.attributes
+        print(attributes)
     }
 }
