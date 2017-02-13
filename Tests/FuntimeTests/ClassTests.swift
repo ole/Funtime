@@ -54,7 +54,7 @@ class ClassTests: XCTestCase {
 
     func testProperties() {
         let sut = Class(base: NSObjectSubclass.self)
-        let properties = sut.properties
+        let properties = sut.properties()
         XCTAssertEqual(properties.count, 2)
     }
 }

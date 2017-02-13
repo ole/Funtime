@@ -4,7 +4,10 @@ import XCTest
 class PropertyTests: XCTestCase {
     func testName() {
         let cls = Class(base: NSObjectSubclass.self)
-        let expected = ["firstName", "lastName"]
-        XCTAssertEqual(cls.properties.map { $0.name }, expected)
+        let sut = cls.properties()
+        XCTAssertEqual(sut.count, 2)
+        XCTAssertEqual(sut[0].name, "firstName")
+        XCTAssertEqual(sut[1].name, "lastName")
+    }
     }
 }

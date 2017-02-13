@@ -29,10 +29,6 @@ public final class Class {
         self.base = object_getClass(instance)
     }
 
-    deinit {
-        _properties?.deallocate(capacity: _propertiesCount + 1)
-    }
-
     public var name: String {
         return String(cString: class_getName(base))
     }
@@ -62,19 +58,21 @@ public final class Class {
     ///
     /// This returns the class's _instance_ properties. To retrieve
     /// a class's _class_ properties, use `metaclass.properties`.
-    public var properties: [Property] {
-        var count: UInt32 = 0
-        _properties = class_copyPropertyList(base, &count)
-        _propertiesCount = Int(count)
-        guard let propertyList = _properties else { return [] }
-        let buffer = UnsafeBufferPointer(start: propertyList, count: _propertiesCount + 1)
+    ///
+    /// - Complexity: O(_n_) where _n_ is the number of properties the
+    ///   class has.
+    public func properties() -> [Property] {
+        var propertiesCount: UInt32 = 0
+        let propertyList = class_copyPropertyList(base, &propertiesCount)
+        guard let list = propertyList else { return [] }
+        let listLength = Int(propertiesCount) + 1 // Including NULL terminator
+        defer {
+            list.deinitialize(count: listLength)
+            list.deallocate(capacity: listLength)
+        }
+        let buffer = UnsafeBufferPointer(start: list, count: listLength)
         return buffer.flatMap { property in property.map(Property.init(base:)) }
     }
-
-    /// A C array of this class's properties, followed by a NULL terminator,
-    /// i.e. length is _propertiesCount + 1.
-    private var _properties: UnsafeMutablePointer<objc_property_t?>? = nil
-    private var _propertiesCount: Int = 0 // Not including NULL terminator
 }
 
 extension Class: Equatable {
