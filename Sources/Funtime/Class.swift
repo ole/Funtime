@@ -53,25 +53,30 @@ public final class Class {
         return Class(of: base)
     }
 
-    /// An array of the class's properties. Properties declared by a
-    /// superclass are not included.
-    ///
-    /// This returns the class's _instance_ properties. To retrieve
-    /// a class's _class_ properties, use `metaclass.properties`.
-    ///
-    /// - Complexity: O(_n_) where _n_ is the number of properties the
-    ///   class has.
-    public func properties() -> [Property] {
+    /**
+     A dictionary of the class's properties. The keys are the names of the properties and the values are `Property` instances. Properties declared by a superclass are not included.
+     
+     This returns the class's _instance_ properties. To retrieve a class's _class_ properties, use `metaclass.properties`.
+     
+     - Complexity: O(_n_) where _n_ is the number of properties the
+       class has.
+     */
+    public func properties() -> [String:Property] {
         var propertiesCount: UInt32 = 0
         let propertyList = class_copyPropertyList(base, &propertiesCount)
-        guard let list = propertyList else { return [] }
+        guard let list = propertyList else { return [:] }
         let listLength = Int(propertiesCount) + 1 // Including NULL terminator
         defer {
             list.deinitialize(count: listLength)
             list.deallocate(capacity: listLength)
         }
         let buffer = UnsafeBufferPointer(start: list, count: listLength)
-        return buffer.flatMap { property in property.map(Property.init(base:)) }
+        let properties = buffer.flatMap { property in property.map(Property.init(base:)) }
+        var result: [String:Property] = [:]
+        for property in properties {
+            result[property.name] = property
+        }
+        return result
     }
 }
 
