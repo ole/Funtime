@@ -1,5 +1,16 @@
 #import "TestFixtures.h"
 
-@implementation NSObjectSubclass
+@implementation BaseClass
+@end
 
+@implementation SubClass
+@end
+
+@implementation TwoProperties
+@end
+
+@implementation ThreeMoreProperties
+@end
+
+@implementation AssortedProperties
 @end

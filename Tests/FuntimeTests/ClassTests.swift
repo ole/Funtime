@@ -4,6 +4,11 @@ import XCTest
 
 class ClassTests: XCTestCase {
     func testName() {
+        let sut = Class(base: BaseClass.self)
+        XCTAssertEqual(sut.name, "BaseClass")
+    }
+
+    func testNameWithFoundationClass() {
         let sut = Class(base: NSDate.self)
         XCTAssertEqual(sut.name, "NSDate")
     }
@@ -26,6 +31,12 @@ class ClassTests: XCTestCase {
         XCTAssertEqual(sut.name, "_SwiftValue")
     }
 
+    func testSuperclass() {
+        let sut = Class(base: SubClass.self)
+        let expected = Class(base: BaseClass.self)
+        XCTAssertEqual(sut.superclass, expected)
+    }
+
     func testSuperclassOfNSObjectIsNil() {
         let sut = Class(base: NSObject.self)
         XCTAssertNil(sut.superclass)
@@ -45,16 +56,33 @@ class ClassTests: XCTestCase {
     func testMetaclass() {
         let sut = Class(base: NSMutableString.self)
         XCTAssertFalse(sut.isMetaclass)
-        XCTAssertTrue(sut.metaclass.base === object_getClass(NSMutableString.self))
         XCTAssertTrue(sut.metaclass.isMetaclass)
-        // The metaclass's metaclass is NSObject's metaclass
+        XCTAssertTrue(sut.metaclass.base === object_getClass(NSMutableString.self))
+    }
+
+    func testMetaclassOfMetaclassIsMetaclassOfNSObject() {
+        let sut = Class(base: NSMutableString.self)
         let nsobj = Class(base: NSObject.self)
         XCTAssertEqual(sut.metaclass.metaclass, nsobj.metaclass)
     }
 
-    func testProperties() {
-        let sut = Class(base: NSObjectSubclass.self)
+    func testPropertiesCountIsCorrect() {
+        let sut = Class(base: TwoProperties.self)
         let properties = sut.properties()
         XCTAssertEqual(properties.count, 2)
+        XCTAssertEqual(properties.keys.sorted(), ["one", "two"])
+    }
+
+    func testPropertiesKeysArePropertyNames() {
+        let sut = Class(base: TwoProperties.self)
+        let properties = sut.properties()
+        XCTAssertEqual(properties.keys.sorted(), ["one", "two"])
+    }
+
+    func testPropertiesDoesntIncludeSuperclassProperties() {
+        let sut = Class(base: ThreeMoreProperties.self)
+        let properties = sut.properties()
+        XCTAssertEqual(properties.count, 3)
+        XCTAssertEqual(properties.keys.sorted(), ["five", "four", "three"])
     }
 }

@@ -4,49 +4,56 @@ import XCTest
 
 class PropertyTests: XCTestCase {
     func testName() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()
-        XCTAssertEqual(sut.count, 2)
-        XCTAssertEqual(sut[0].name, "firstName")
-        XCTAssertEqual(sut[1].name, "lastName")
+        let cls = Class(base: TwoProperties.self)
+        let properties = cls.properties()
+        XCTAssertEqual(properties.count, 2)
+        XCTAssertEqual(properties["one"]?.name, "one")
+        XCTAssertEqual(properties["two"]?.name, "two")
     }
 
-    func testIsAtomic() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()[0]
-        XCTAssertFalse(sut.isAtomic)
-    }
-
-    func testIsNonAtomic() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()[0]
-        XCTAssertTrue(sut.isNonAtomic)
-    }
-
-    func testAttributeString() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()[0]
-        XCTAssertEqual(sut.attributeString, "T@\"NSString\",C,N,V_firstName")
+    func testIsAtomicAndIsNonAtomic() {
+        let cls = Class(base: AssortedProperties.self)
+        let atomic = cls.properties()["atomicProperty"]
+        let nonAtomic = cls.properties()["nonAtomicProperty"]
+        XCTAssert(atomic?.isAtomic == true)
+        XCTAssert(atomic?.isNonAtomic == false)
+        XCTAssert(nonAtomic?.isAtomic == false)
+        XCTAssert(nonAtomic?.isNonAtomic == true)
     }
 
     func testTypeEncoding() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()[0]
-        XCTAssertEqual(sut.typeEncoding, "@\"NSString\"")
+        let cls = Class(base: AssortedProperties.self)
+        let properties = cls.properties()
+        let intProperty = properties["intProperty"]
+        let idProperty = properties["idProperty"]
+        let nsStringProperty = properties["nsStringProperty"]
+        XCTAssertEqual(intProperty?.typeEncoding, "i")
+        XCTAssertEqual(idProperty?.typeEncoding, "@")
+        XCTAssertEqual(nsStringProperty?.typeEncoding, "@\"NSString\"")
     }
 
     func testAttributes() {
-        let cls = Class(base: NSObjectSubclass.self)
-        let sut = cls.properties()[0]
-        let attributes = sut.attributes
-        print(attributes)
+        let cls = Class(base: AssortedProperties.self)
+        let sut = cls.properties()["nonAtomicCopyReadonlyArrayProperty"]
+        let attributes = sut?.attributes
+        XCTAssertEqual(attributes?.count, 5)
+        XCTAssertEqual(attributes?["T"], "@\"NSArray\"")
+        XCTAssertEqual(attributes?["V"], "_nonAtomicCopyReadonlyArrayProperty")
+        XCTAssertEqual(attributes?["R"], "")
+        XCTAssertEqual(attributes?["C"], "")
+        XCTAssertEqual(attributes?["N"], "")
+        XCTAssertNil(attributes?["&"])
+        XCTAssertNil(attributes?["G"])
+        XCTAssertNil(attributes?["S"])
+        XCTAssertNil(attributes?["D"])
+        XCTAssertNil(attributes?["W"])
+        XCTAssertNil(attributes?["P"])
+        XCTAssertNil(attributes?["t"])
     }
 
-    func testOjbCModuleImport() {
-        let cls = Class(base: NSObjectSubclass.self)
-        XCTAssertNotNil(cls)
-        let sut = cls.properties()
-        XCTAssertEqual(sut.count, 2)
-        XCTAssertEqual(sut[0].name, "firstName")
+    func testAttributeString() {
+        let cls = Class(base: AssortedProperties.self)
+        let sut = cls.properties()["nonAtomicCopyReadonlyArrayProperty"]
+        XCTAssertEqual(sut?.attributeString, "T@\"NSArray\",R,C,N,V_nonAtomicCopyReadonlyArrayProperty")
     }
 }
