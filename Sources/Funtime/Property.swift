@@ -59,11 +59,11 @@ public final class Property {
     ///     P    garbage-collected
     ///     T    Value is the type encoding (@encode string).
     ///     t    Value is the type using old-style encoding.
-    public private(set) lazy var attributes: [String: String] = self._attributes()
+    public private(set) lazy var attributes: [String:String] = self._attributes()
 
     /// Helper function to lazily initialize `attributes`.
     /// - Complexity: O(_n_) where _n_ is the number of attributes.
-    private func _attributes() -> [String: String] {
+    private func _attributes() -> [String:String] {
         var attributesCount: UInt32 = 0
         let attributeList = property_copyAttributeList(base, &attributesCount)
         guard let list = attributeList else { return [:] }
@@ -73,7 +73,7 @@ public final class Property {
             list.deallocate(capacity: listLength)
         }
         let buffer = UnsafeBufferPointer(start: list, count: listLength)
-        var result: [String: String] = [:]
+        var result: [String:String] = [:]
         for attribute in buffer {
             let name = String(cString: attribute.name)
             let value = String(cString: attribute.value)

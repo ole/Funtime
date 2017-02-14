@@ -1,7 +1,8 @@
 import ObjectiveC
 
-/// A wrapper around a class object (`AnyClass` in Swift;
-/// `Class` in Objective-C) in the Objective-C runtime.
+/**
+ A wrapper around a class object (`AnyClass` in Swift; `Class` in Objective-C) in the Objective-C runtime.
+ */
 public final class Class {
     public let base: AnyClass
 
