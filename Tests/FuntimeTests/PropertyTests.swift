@@ -1,4 +1,5 @@
 import Funtime
+import TestFixtures
 import XCTest
 
 class PropertyTests: XCTestCase {
@@ -25,7 +26,7 @@ class PropertyTests: XCTestCase {
     func testAttributeString() {
         let cls = Class(base: NSObjectSubclass.self)
         let sut = cls.properties()[0]
-        XCTAssertEqual(sut.attributeString, "T@\"NSString\",N,C,VfirstName")
+        XCTAssertEqual(sut.attributeString, "T@\"NSString\",C,N,V_firstName")
     }
 
     func testTypeEncoding() {
@@ -39,5 +40,13 @@ class PropertyTests: XCTestCase {
         let sut = cls.properties()[0]
         let attributes = sut.attributes
         print(attributes)
+    }
+
+    func testOjbCModuleImport() {
+        let cls = Class(base: NSObjectSubclass.self)
+        XCTAssertNotNil(cls)
+        let sut = cls.properties()
+        XCTAssertEqual(sut.count, 2)
+        XCTAssertEqual(sut[0].name, "firstName")
     }
 }

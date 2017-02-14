@@ -1,5 +1,5 @@
-import Foundation
 import Funtime
+import TestFixtures
 import XCTest
 
 class ClassTests: XCTestCase {
