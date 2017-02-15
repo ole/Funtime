@@ -1,5 +1,4 @@
 import Funtime
-import TestFixtures
 import XCTest
 
 class PropertyTests: XCTestCase {
