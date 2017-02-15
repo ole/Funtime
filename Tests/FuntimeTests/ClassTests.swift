@@ -100,7 +100,7 @@ class ClassTests: XCTestCase {
         }
         let sut = Class(of: AssortedProperties.self)
         let properties = sut.properties()
-        XCTAssertNotNil(properties["classDoubleProperty"])
-        XCTAssertEqual(properties["classDoubleProperty"]?.typeEncoding, "d")
+        XCTAssertNotNil(properties["classProperty"])
+        XCTAssertEqual(properties["classProperty"]?.typeEncoding, "d")
     }
 }

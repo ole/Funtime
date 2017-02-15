@@ -14,14 +14,14 @@
 
 @implementation AssortedProperties
 
-static double _classDoubleProperty = 0.0;
+static double _classProperty = 0.0;
 
-+ (double)classDoubleProperty {
-    return _classDoubleProperty;
++ (double)classProperty {
+    return _classProperty;
 }
 
-+ (void)setClassDoubleProperty:(double)newValue {
-    _classDoubleProperty = newValue;
++ (void)setClassProperty:(double)newValue {
+    _classProperty = newValue;
 }
 
 @end
