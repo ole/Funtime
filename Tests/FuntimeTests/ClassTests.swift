@@ -93,8 +93,9 @@ class ClassTests: XCTestCase {
     }
 
     func testClassPropertiesAreListedOnMetaclass() {
-        guard isDeploymentTargetAtLeast(macOS: __MAC_10_12, iOS: __IPHONE_10_0, tvOS: __TVOS_10_0, watchOS: __WATCHOS_3_0) else {
-            print("Omitting testClassPropertiesAreListedOnMetaclass(), requires deployment target >= macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0.")
+        // The Objective-C runtime doesn't handle class properties on deplyment targets < macOS 10.11/iOS 9.0. See https://lists.swift.org/pipermail/swift-users/Week-of-Mon-20170213/004755.html for details.
+        guard isDeploymentTargetAtLeast(macOS: __MAC_10_11, iOS: __IPHONE_9_0, tvOS: __TVOS_9_0, watchOS: __WATCHOS_2_0) else {
+            print("Omitting testClassPropertiesAreListedOnMetaclass(), requires deployment target >= macOS 10.11, iOS 9.0, tvOS 9.0, watchOS 2.0.")
             return
         }
         let sut = Class(of: AssortedProperties.self)
