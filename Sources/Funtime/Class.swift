@@ -59,6 +59,8 @@ public final class Class {
      
      This returns the class's _instance_ properties. To retrieve a class's _class_ properties, use `metaclass.properties`.
      
+     - Note: Class properties have been introduced with macOS 10.12 and iOS 10.0. If your deployment target is lower than macOS 10.12 or iOS 10.0, the Objective-C runtime will not find any class properties.
+     
      - Complexity: O(_n_) where _n_ is the number of properties the
        class has.
      */

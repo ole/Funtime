@@ -85,4 +85,21 @@ class ClassTests: XCTestCase {
         XCTAssertEqual(properties.count, 3)
         XCTAssertEqual(properties.keys.sorted(), ["five", "four", "three"])
     }
+
+    func testClassPropertiesAreNotListedOnInstance() {
+        let sut = Class(base: AssortedProperties.self)
+        let properties = sut.properties()
+        XCTAssertNil(properties["classDoubleProperty"])
+    }
+
+    func testClassPropertiesAreListedOnMetaclass() {
+        guard isDeploymentTargetAtLeast(macOS: __MAC_10_12, iOS: __IPHONE_10_0, tvOS: __TVOS_10_0, watchOS: __WATCHOS_3_0) else {
+            print("Omitting testClassPropertiesAreListedOnMetaclass(), requires deployment target >= macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0.")
+            return
+        }
+        let sut = Class(of: AssortedProperties.self)
+        let properties = sut.properties()
+        XCTAssertNotNil(properties["classDoubleProperty"])
+        XCTAssertEqual(properties["classDoubleProperty"]?.typeEncoding, "d")
+    }
 }

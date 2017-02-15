@@ -26,4 +26,5 @@
 @property (retain) NSString *nsStringProperty;
 @property (retain) id idProperty;
 @property (nonatomic, copy, readonly) NSArray *nonAtomicCopyReadonlyArrayProperty;
+@property (class, assign) double classDoubleProperty;
 @end
