@@ -36,5 +36,6 @@
 @property (assign) char assignProperty;
 @property (retain) NSDate *retainProperty;
 @property (copy) NSArray *someCopyProperty;
+@property (weak) id weakProperty;
 
 @end

@@ -44,6 +44,14 @@ class PropertyTests: XCTestCase {
         XCTAssert(copy?.isCopy == true)
     }
 
+    func testIsWeak() {
+        let cls = Class(base: AssortedProperties.self)
+        let weak = cls.properties()["weakProperty"]
+        let strong = cls.properties()["idProperty"]
+        XCTAssert(weak?.isWeak == true)
+        XCTAssert(strong?.isWeak == false)
+    }
+
     func testTypeEncoding() {
         let cls = Class(base: AssortedProperties.self)
         let properties = cls.properties()
