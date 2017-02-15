@@ -28,9 +28,13 @@
 @property (nonatomic, assign) int nonAtomicProperty;
 @property (atomic, assign) int atomicProperty;
 @property (assign) int intProperty;
-@property (retain) NSString *nsStringProperty;
+@property (copy) NSString *nsStringProperty;
 @property (retain) id idProperty;
 @property (nonatomic, copy, readonly) NSArray *nonAtomicCopyReadonlyArrayProperty;
 @property (class, assign) double classProperty;
+@property (copy, readonly) NSString *readOnlyProperty;
+@property (assign) char assignProperty;
+@property (retain) NSDate *retainProperty;
+@property (copy) NSArray *someCopyProperty;
 
 @end

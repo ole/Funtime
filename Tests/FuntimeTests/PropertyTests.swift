@@ -21,6 +21,30 @@ class PropertyTests: XCTestCase {
         XCTAssert(nonAtomic?.isNonAtomic == true)
     }
 
+    func testIsReadOnly() {
+        let cls = Class(base: AssortedProperties.self)
+        let readonly = cls.properties()["readOnlyProperty"]
+        let readwrite = cls.properties()["nsStringProperty"]
+        XCTAssert(readonly?.isReadOnly == true)
+        XCTAssert(readwrite?.isReadOnly == false)
+    }
+
+    func testIsAssignRetainCopy() {
+        let cls = Class(base: AssortedProperties.self)
+        let assign = cls.properties()["assignProperty"]
+        let retain = cls.properties()["retainProperty"]
+        let copy = cls.properties()["someCopyProperty"]
+        XCTAssert(assign?.isAssign == true)
+        XCTAssert(assign?.isRetain == false)
+        XCTAssert(assign?.isCopy == false)
+        XCTAssert(retain?.isAssign == false)
+        XCTAssert(retain?.isRetain == true)
+        XCTAssert(retain?.isCopy == false)
+        XCTAssert(copy?.isAssign == false)
+        XCTAssert(copy?.isRetain == false)
+        XCTAssert(copy?.isCopy == true)
+    }
+
     func testTypeEncoding() {
         let cls = Class(base: AssortedProperties.self)
         let properties = cls.properties()
