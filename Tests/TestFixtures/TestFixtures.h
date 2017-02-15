@@ -37,5 +37,8 @@
 @property (retain) NSDate *retainProperty;
 @property (copy) NSArray *someCopyProperty;
 @property (weak) id weakProperty;
+@property (assign) int dynamicProperty;
+@property (assign, getter=isBool, setter=setBool:) BOOL boolProperty;
+@property (copy) NSDictionary *customBackingIVarProperty;
 
 @end

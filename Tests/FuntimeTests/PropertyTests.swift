@@ -52,6 +52,41 @@ class PropertyTests: XCTestCase {
         XCTAssert(strong?.isWeak == false)
     }
 
+    func testIsDynamic() {
+        let cls = Class(base: AssortedProperties.self)
+        let dynamic = cls.properties()["dynamicProperty"]
+        let synthesized = cls.properties()["intProperty"]
+        XCTAssert(dynamic?.isDynamic == true)
+        XCTAssert(synthesized?.isDynamic == false)
+    }
+
+    func testCustomGetterAndSetterAreNilIfNotSpecified() {
+        let cls = Class(base: AssortedProperties.self)
+        let property = cls.properties()["intProperty"]
+        XCTAssertNotNil(property)
+        XCTAssertNil(property?.customGetter)
+        XCTAssertNil(property?.customSetter)
+    }
+
+    func testCustomGetterAndSetterNames() {
+        let cls = Class(base: AssortedProperties.self)
+        let property = cls.properties()["boolProperty"]
+        XCTAssertEqual(property?.customGetter, "isBool")
+        XCTAssertEqual(property?.customSetter, "setBool:")
+    }
+
+    func testDefaultBackingIVarName() {
+        let cls = Class(base: AssortedProperties.self)
+        let property = cls.properties()["intProperty"]
+        XCTAssertEqual(property?.backingIVar, "_intProperty")
+    }
+
+    func testCustomBackingIVarName() {
+        let cls = Class(base: AssortedProperties.self)
+        let property = cls.properties()["customBackingIVarProperty"]
+        XCTAssertEqual(property?.backingIVar, "myCustomIVar")
+    }
+
     func testTypeEncoding() {
         let cls = Class(base: AssortedProperties.self)
         let properties = cls.properties()

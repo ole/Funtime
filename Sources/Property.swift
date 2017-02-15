@@ -22,7 +22,9 @@ public final class Property {
     public var isWeak: Bool { return attributes["W"] != nil }
     public var isDynamic: Bool { return attributes["D"] != nil }
     public var isGarbageCollected: Bool { return attributes["P"] != nil }
+    // TODO: Should this return `Selector?`?
     public var customGetter: String? { return attributes["G"] }
+    // TODO: Should this return `Selector?`?
     public var customSetter: String? { return attributes["S"] }
     public var backingIVar: String? { return attributes["V"] }
 
