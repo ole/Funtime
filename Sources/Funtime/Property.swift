@@ -15,6 +15,7 @@ public final class Property {
 
     public var isAtomic: Bool { return !isNonAtomic }
     public var isNonAtomic: Bool { return attributes["N"] != nil }
+    public var isAssign: Bool { return !isRetain && !isCopy }
     public var isReadOnly: Bool { return attributes["R"] != nil }
     public var isRetain: Bool { return attributes["&"] != nil }
     public var isCopy: Bool { return attributes["C"] != nil }
