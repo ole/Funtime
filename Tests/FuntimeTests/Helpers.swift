@@ -10,7 +10,7 @@ import Foundation
  ...
  }
 
- - Note: This is a runtime, not a compile-time, test.
+ - Note: Although this is a runtime test, it uses the `__MAC_OS_X_VERSION_MIN_REQUIRED` etc. compile-time macros to determine the deployment target. So this function checks the deployment target it itself has been compiled with, not the deployment target of the calling code. If the calling code is in another module, it's possible that it has been compiled with a different deployment target.
  */
 public func isDeploymentTargetAtLeast(macOS macOSVersion: Int32, iOS iOSVersion: Int32, tvOS tvOSVersion: Int32, watchOS watchOSVersion: Int32) -> Bool {
     #if os(macOS)
